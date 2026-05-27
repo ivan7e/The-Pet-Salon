@@ -1,88 +1,98 @@
-let pets=[]; // the empty array
-//HTML inputs
-let inputName = document.getElementById("txtName");
-let inputAge = document.getElementById("txtAge");
-let inputGender = document.getElementById("txtGender");
-let inputBreed = document.getElementById("txtBreed");
-let inputService = document.getElementById("txtService");
+const pets = [
+  { name: "Scooby", age: 8, gender: "Female", breed: "Great Dane", service: "Dog Walking" },
+  { name: "Scrappy", age: 7, gender: "Male", breed: "Boxer", service: "Grooming" },
+  { name: "Doggy", age: 1, gender: "Male", breed: "Pug", service: "Bath and Brush" }
+];
 
-//object constructor
-function Pet(name, age, gender, breed, service){
-    this.name = name;
-    this.age = age;
-    this.gender = gender;
-    this.breed = breed;
-    this.service = service;
+const form = document.querySelector("#petForm");
+const inputName = document.querySelector("#txtName");
+const inputAge = document.querySelector("#txtAge");
+const inputGender = document.querySelector("#txtGender");
+const inputBreed = document.querySelector("#txtBreed");
+const inputService = document.querySelector("#txtService");
+const formMessage = document.querySelector("#formMessage");
+const results = document.querySelector("#results");
+const petCount = document.querySelector("#petCount");
+
+function createPet() {
+  return {
+    name: inputName.value.trim(),
+    age: Number(inputAge.value),
+    gender: inputGender.value,
+    breed: inputBreed.value.trim(),
+    service: inputService.value
+  };
 }
 
-function register(){
-    // create the newPet
-    let newPet = new Pet(inputName.value, inputAge.value, inputGender.value, inputBreed.value, inputService.value);
-    //push the newPet
-    pets.push(newPet);
-    //display the pets
-    displayPets();
-}
-//display name function
-function displayPets(){
-    let result = "";
+function validatePet(pet) {
+  if (!pet.name || !pet.breed || !pet.gender || !pet.service) {
+    return "Please complete every field.";
+  }
 
-    document.getElementById("results").innerHTML="";
+  if (!Number.isFinite(pet.age) || pet.age < 0 || pet.age > 40) {
+    return "Please enter an age between 0 and 40.";
+  }
 
-    for(let i=0;i<pets.length;i++){
-        // document.getElementById("results").innerHTML+=`<li>${pets[i].name} - ${pets[i].age}</li>`;// arrayName[position]
-        //result += `
-            //<div class="card" style="width: 18rem;">
-            //<div class="card-body">
-                     //<h5 class="card-title">${pets[i].name} - <span class="text-secondary">${pets[i].service}</span> </h5>
-                    //<h6>${pets[i].breed}</h6>
-                    //<p class="card-text">${pets[i].gender}, ${pets[i].age}</p>
-                    //<a href="#" class="btn btn-danger btn-sm">Delete</a>
-                //</div>
-            //</div>
-        //`
-
-        result += `
-        <tr id="${i}">
-            <tr>
-              <td>${pets[i].name}</td>
-                <td>${pets[i].age}</td>
-                <td>${pets[i].gender}</td>
-                <td>${pets[i].breed}</td>
-                <td>${pets[i].service}</td>
-                <td>${pets[i].delete}</td>
-                <td><button class="btn btn-danger btn-sm" onclick="deletePet(${i})">Delete</button></td>  
-            </tr>
-        `
-
-    }
-
-        
-
-    document.getElementById("results").innerHTML=result;
+  return "";
 }
 
+function registerPet(event) {
+  event.preventDefault();
 
-function deletePet(petID){
-    console.log("Delete a pet... " + petID);
-    //delete from HTML
-    document.getElementById(petID).remove();
-    //delete from the array
-    pets.splice(petID,1);
-    displayPets();
+  const pet = createPet();
+  const error = validatePet(pet);
+
+  if (error) {
+    formMessage.textContent = error;
+    formMessage.className = "form-message error";
+    return;
+  }
+
+  pets.push(pet);
+  form.reset();
+  formMessage.textContent = `${pet.name} was registered for ${pet.service}.`;
+  formMessage.className = "form-message success";
+  displayPets();
+  inputName.focus();
 }
 
+function displayPets() {
+  results.innerHTML = "";
 
-function init(){
-    //create pet objects
-    let pet1 = new Pet("Scooby",80,"Female", "Great Dane", "Dog Walking");
-    //create another pet Scrappy
-    let pet2 = new Pet("Scrappy",70,"Male", "Boxer", "Grooming");
-    let pet3 = new Pet("Doggy", 1, "Male", "Pug", "Dog Walking");
-    // push the pets in the array
-    pets.push(pet1,pet2,pet3);
-    // display names
-    displayPets();
+  pets.forEach((pet, index) => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${pet.name}</td>
+      <td>${pet.age}</td>
+      <td>${pet.gender}</td>
+      <td>${pet.breed}</td>
+      <td>${pet.service}</td>
+      <td>
+        <button class="delete-button" type="button" data-index="${index}">Delete</button>
+      </td>
+    `;
+
+    results.appendChild(row);
+  });
+
+  petCount.textContent = `${pets.length} ${pets.length === 1 ? "pet" : "pets"}`;
 }
 
-window.onload=init;// wait to render the HTML
+function deletePet(index) {
+  const [removedPet] = pets.splice(index, 1);
+  formMessage.textContent = removedPet ? `${removedPet.name} was removed.` : "";
+  formMessage.className = "form-message";
+  displayPets();
+}
+
+form.addEventListener("submit", registerPet);
+
+results.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-index]");
+  if (!button) return;
+  deletePet(Number(button.dataset.index));
+});
+
+displayPets();

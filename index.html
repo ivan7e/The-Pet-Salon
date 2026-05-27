@@ -1,27 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="mystyle.css">
-    <title>PetSalon</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="mystyle.css">
+  <title>The Fashion Pet Salon</title>
 </head>
 <body>
-    <header>
-        <h1>The Fashion pet</h1>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="register.html">Register</a>
-        </nav>
-    </header>
+  <header class="site-header">
+    <a class="logo" href="index.html">The Fashion Pet</a>
+    <nav aria-label="Primary navigation">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="register.html">Register</a>
+    </nav>
+  </header>
 
-    <main>
-        <h2>Welcome to the Fashion pet</h2>
-        <p>The best place for your pet </p>
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Pet grooming and care</p>
+        <h1>Style, comfort, and care for every pet.</h1>
+        <p>
+          The Fashion Pet helps owners schedule grooming, walking, and spa services
+          while keeping every pet's information organized in one simple place.
+        </p>
+        <a class="button-link" href="register.html">Register a Pet</a>
+      </div>
+      <img src="puppy.png" alt="Happy puppy at The Fashion Pet Salon">
+    </section>
 
-        <img src="puppy.png" alt="this is a puppy">
-
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta cum debitis facere laudantium ea, voluptate id, odio quaerat quae deleniti doloribus, nesciunt cupiditate. Accusantium, deleniti. Cupiditate dignissimos cumque laboriosam. Eum.</p>
-    </main>
+    <section class="features" aria-label="Salon services">
+      <article>
+        <h2>Grooming</h2>
+        <p>Bath, trim, brush, and coat care for pets who deserve to look sharp.</p>
+      </article>
+      <article>
+        <h2>Dog Walking</h2>
+        <p>Simple walking services to keep pets active, social, and happy.</p>
+      </article>
+      <article>
+        <h2>Spa Care</h2>
+        <p>Nail trims, gentle cleanups, and care options for a relaxed visit.</p>
+      </article>
+    </section>
+  </main>
 </body>
 </html>
